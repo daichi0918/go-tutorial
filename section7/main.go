@@ -24,7 +24,37 @@ func noreturn() {
 }
 
 
+func returnFunc() func() {
+	return func() {
+		fmt.Println("I'm a function")
+	}
+}
+
+func callFunction(f func()) {
+	f()
+}
+
+// クロージャー(外側の変数を保持し続ける関数)
+func later() func(string) string {
+	var store string
+	return func(next string) string {
+		s := store
+		store = next
+		return s
+	}
+}
+
+func integers() func() int {
+	i := 0
+	return func() int {
+		i++
+		return i
+	}
+}
+
+
 func main() {
+	// 関数
 	i:= Plus(3, 5)
 	fmt.Println(i)
 
@@ -36,4 +66,45 @@ func main() {
 	fmt.Println(i4)
 
 	noreturn()
+
+	// 無名関数
+	f := func(x, y int) int {
+		return x + y
+	}
+	i5 := f(10, 20)
+	fmt.Println(i5)
+
+	// 即時実行関数
+	i6 :=	func(x, y int) int {
+		return x + y
+	}(1, 2)
+
+	fmt.Println(i6)
+
+	// 関数を返す関数
+	f2:= returnFunc()
+	f2()
+
+	// 関数を引数に取る関数
+	callFunction(func() {
+		fmt.Println("I'm a function!!")
+	}) // => "I'm a function"
+
+	// クロージャーの実装
+	fc := later()
+	fmt.Println(fc("Hello"))
+	fmt.Println(fc("my"))
+	fmt.Println(fc("name"))
+	fmt.Println(fc("is"))
+	fmt.Println(fc("Gopher"))
+
+	// ジェネレーターの実装
+	ints := integers()
+
+	fmt.Println(ints()) // => "1"
+	fmt.Println(ints()) // => "2"
+	fmt.Println(ints()) // => "3"
+
+	otherInts := integers()
+	fmt.Println(otherInts()) // => "1"
 }
