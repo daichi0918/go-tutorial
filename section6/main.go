@@ -41,4 +41,9 @@ func main() {
 	fmt.Println(true || false == true);
 	fmt.Println(false || false == true);
 	fmt.Println(!true);
+
+// 	 {
+//   "name": "gaia",
+//   "age": 16
+// } 
 }
